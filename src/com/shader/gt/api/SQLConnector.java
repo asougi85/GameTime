@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
+
+import com.shader.gt.GameTime;
 
 
 public class SQLConnector implements Connector{
@@ -25,7 +28,11 @@ public class SQLConnector implements Connector{
 		this.user = user;
 		this.password = password;
 	}
-
+	
+	public void setUrl(String u){
+		this.url = u;
+	}
+	
 	@Override
 	public void execute(DBExecutor exe) {
 		Runnable runnable = new Runnable(){
@@ -41,16 +48,16 @@ public class SQLConnector implements Connector{
 		try (Connection con = DriverManager.getConnection(url, user, password);){
 			exe.run(con);
 		} catch (SQLException e) {
-			System.out.println("[GameTime]"+"MySQL数据库连接异常，请检查您的配置（异常代码: "+e.getErrorCode()+")");
+			GameTime.getInstance().getLogger().log(Level.SEVERE, "[GameTime]"+"MySQL数据库连接异常，请检查您的配置（异常代码: "+e.getErrorCode()+")");
 			System.out.println("[GameTime]"+e.getLocalizedMessage());
 		}
 	}
 
 	private Runnable deamon(CallableExecutor exe){
-		try (Connection con = DriverManager.getConnection(url);){
+		try (Connection con = DriverManager.getConnection(url, user, password);){
 			return exe.run(con);
 		} catch (SQLException e) {
-			System.out.println("[GameTime]"+"MySQL数据库连接异常，请检查您的配置（异常代码: "+e.getErrorCode()+")");
+			GameTime.getInstance().getLogger().log(Level.SEVERE, "[GameTime]"+"MySQL数据库连接异常，请检查您的配置（异常代码: "+e.getErrorCode()+")");
 			System.out.println("[GameTime]"+e.getLocalizedMessage());
 		}
 		return new Runnable(){@Override public void run(){}};

@@ -1,20 +1,43 @@
-#%time%替换符可使用%day%,%hour%,%minute%,%second%
-
+#%time%替换符，可使用%day%,%hour%,%minute%,%second%
 time_format: '%day%天%hour%小时%minute%分钟'
 
+#玩家第一次进入游戏得到的游戏时间
+original_time: 30
+
+cost_time: true
+
+op_can_use_add: false
+
+#是否与登陆插件互联,使用后玩家默认在插件登陆以后才扣费,目前支持的插件有:AuthMe, CrazyLogin, XsignIn, LoginSystemPro
+use_login_hook: true
+
+#玩家进入游戏，数据初始化未完成时,使用命令出现
 waiting_message: '&e[GameTime]&b正在读取您的数据库信息,请等待'
+#查询游戏时间时出现
 check_message: '&e[GameTime]&b%name%的游戏时间还剩下%time%'
+#被查询玩家不存在时出现
+check_missing_message: '&e[GameTime]&b该玩家不存在'
+#充值成功时出现
 success_message: '&e[GameTime]&b充值成功！'
+#充值错误时出现
 fail_message: '&e[GameTime]&b您的CDKEY有误'
 
+#玩家剩余游戏时间到达阈值时是否通知
 inform: true
-#分钟为单位/use 
+#阈值，以分钟为单位 
 inform_time: 30
+#剩余游戏时间达到阈值时出现
 inform_message: '你的游戏时间还剩下%time%'
+#是否使用Title来显示
 inform_use_title: true
-
+#是否使用mysql数据库（和sqlite只使用一个）
 use_mysql: false
+#mysql数据库名(不适用于每个db是独立database的sqlite,sqlite数据库储存在与服务器核心同目录的GameTime.db中)
+database: 'GameTime'
+#地址
 address: '127.0.0.1'
+#端口
 port: 22003
+#你的账号密码
 user: 'your account'
 password: 'your password'

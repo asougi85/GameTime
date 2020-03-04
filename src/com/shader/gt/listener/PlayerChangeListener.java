@@ -24,6 +24,9 @@ public class PlayerChangeListener implements Listener{
 	
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent evt){
-		con.execute(new ExitExecutor(evt.getPlayer().getName()));
+		String name = evt.getPlayer().getName();
+		con.execute(new ExitExecutor(name));
+		if(gt.getLoginReader()!=null)
+			gt.getLoginReader().quit(name);
 	}
 }

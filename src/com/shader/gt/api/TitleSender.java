@@ -2,10 +2,16 @@ package com.shader.gt.api;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import com.shader.gt.GameTime;
+
 import static com.comphenix.protocol.utility.MinecraftReflection.*;
 import java.lang.reflect.Constructor;
 
 public class TitleSender {
+	
+	private static GameTime plugin = GameTime.getInstance();
+	
 	public static void sendPacket(Player player, Object packet) {
 		try {
 			Object handle = player.getClass().getMethod("getHandle").invoke(player);
@@ -18,6 +24,10 @@ public class TitleSender {
 
 	public static void sendTitle(Player player, Integer fadeIn, Integer stay, Integer fadeOut, String title,
 			String subtitle) {
+		if(!plugin.isFitForTitle){
+			player.sendMessage(title+","+subtitle);
+			return;
+		}
 		try {
 			Object e;
 			Object chatTitle;

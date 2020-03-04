@@ -33,7 +33,7 @@ public class UseExecutor implements CallableExecutor {
 		try (Statement state = c.createStatement()) {
 			state.execute("SELECT * FROM MAP WHERE account = '" + key + "'");
 			ResultSet set = state.getResultSet();
-			if (set == null)
+			if (!set.next())
 				return new Runnable() {
 					public void run() {
 						p.sendMessage(Utils.toMessage(config.fail_message));
@@ -53,6 +53,7 @@ public class UseExecutor implements CallableExecutor {
 				ps.setDate(3, new Date(System.currentTimeMillis()));
 				ps.setLong(4, value);
 				ps.execute();
+				ps.close();
 			}
 		} catch (SQLException e) {
 			throw e;

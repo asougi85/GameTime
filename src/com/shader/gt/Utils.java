@@ -29,14 +29,27 @@ public class Utils {
 		}
 	}
 
-	private static String getTime(long time) {
+	public static String getTime(long time) {
 		String base = config.time_format;
 		long second = time % 60;
 		long minute = ((time - second) / 60) % 60;
 		long hour = ((time - second - minute * 60) / 3600) % 24;
-		long day = ((time - second - minute * 60 - hour * 24 * 60)/(60*60*24));
+		long day = ((time - second - minute * 60 - hour * 60 * 60) / (60 * 60 * 24));
 		return base.replace("%day%", day + "").replace("%hour%", hour + "").replace("%minute%", minute + "")
 				.replace("%second%", second + "");
+	}
+
+	public static String getMinTime(long time) {
+		return time / 60l + "·ÖÖÓ";
+	}
+
+	public static String getMinMSG(String name) {
+		if (users.containsKey(name)) {
+			long time = users.get(name);
+			return getMinTime(time);
+		} else {
+			return "%minute%";
+		}
 	}
 
 	public static String toMessage(String arg, String name) {
@@ -49,14 +62,14 @@ public class Utils {
 			return toMessage(ar);
 		}
 	}
-	
-	public static String toMessage(String arg, String name,long value) {
-			String tf = getTime(value);
-			return toMessage(arg.replace("%time%", tf).replace("%name%", name));
+
+	public static String toMessage(String arg, String name, long value) {
+		String tf = getTime(value);
+		return toMessage(arg.replace("%time%", tf).replace("%name%", name));
 	}
-	
+
 	public static String toMessage(String arg) {
-		return arg.replace('&', 'Â§');
+		return arg.replace('&', '¡ì');
 	}
 
 	public static boolean isNumeric(String str) {
@@ -67,18 +80,9 @@ public class Utils {
 		}
 		return true;
 	}
-	public static String getMinMSG(String name) {
-		if (users.containsKey(name)) {
-			long time = users.get(name);
-			return getMinTime(time);
-		} else {
-			return "%minute%";
-		}
-	}
-	public static String getMinTime(long time) {
-		return time / 60l + "åˆ†é’Ÿ";
-	}
+
 	public static String randomKey() {
 		return UUID.randomUUID().toString();
 	}
+
 }

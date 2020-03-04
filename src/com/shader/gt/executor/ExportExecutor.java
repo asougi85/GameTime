@@ -14,6 +14,7 @@ import org.bukkit.command.CommandSender;
 
 import com.google.common.collect.Sets;
 import com.shader.gt.GameTime;
+import com.shader.gt.Utils;
 import com.shader.gt.api.CallableExecutor;
 import com.shader.gt.api.ExportQueue;
 
@@ -21,7 +22,7 @@ public class ExportExecutor implements CallableExecutor {
 
 	long value;
 	CommandSender sender;
-	
+
 	public ExportExecutor(CommandSender sender) {
 		this(sender, -1L);
 	}
@@ -40,18 +41,19 @@ public class ExportExecutor implements CallableExecutor {
 				state.execute("SELECT * FROM MAP WHERE value=" + value);
 			}
 			ResultSet set = state.getResultSet();
-			if (set == null)
+			if (!set.next())
 				return new Runnable() {
 					public void run() {
 						sender.sendMessage("未找到指定的Key");
 					}
 				};
-			HashSet<String> texts = Sets.newHashSet();
-
-			while (set.next()) {
+				
+			final HashSet<String> texts = Sets.newHashSet();
+			do {
 				String account = set.getString(1);
 				texts.add(account);
-			}
+			} while (set.next());
+			
 			if (texts.isEmpty())
 				return new Runnable() {
 					public void run() {
@@ -67,8 +69,8 @@ public class ExportExecutor implements CallableExecutor {
 						gt.createNewFile();
 						FileWriter fileWritter = new FileWriter(gt, true);
 						BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
-						for(String s:texts){
-							bufferWritter.write(s+"\n");
+						for (String s : texts) {
+							bufferWritter.write(s + "\n");
 						}
 						bufferWritter.flush();
 						bufferWritter.close();
@@ -80,7 +82,7 @@ public class ExportExecutor implements CallableExecutor {
 		} catch (SQLException e) {
 			throw e;
 		}
-		return new Runnable(){
+		return new Runnable() {
 			@Override
 			public void run() {
 				sender.sendMessage("Key表已经导出完成！");

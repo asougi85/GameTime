@@ -1,15 +1,15 @@
 name: GameTime
-version: 1.0.0
-authors: [UnknownDomain,woshi85]
+version: 1.6.1
+authors: [a,asougi85]
 depend: [ProtocolLib]
-
+softdepend: [AuthMe,CrazyLogin,xSignIn,Login,PlaceholderAPI]
 main: com.shader.gt.GameTime
 
 permissions: 
   gametime.gt: 
     default: op
     
-  gametime.help:
+  gametime.help: 
     default: true
     
   gametime.use: 

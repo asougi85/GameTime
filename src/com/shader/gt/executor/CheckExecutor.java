@@ -1,9 +1,9 @@
 package com.shader.gt.executor;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.bukkit.command.CommandSender;
 
@@ -24,14 +24,10 @@ public class CheckExecutor implements CallableExecutor {
 
 	@Override
 	public Runnable run(Connection c) throws SQLException {		
-		try (PreparedStatement state = c.prepareStatement("SELECT * FROM TIME WHERE user = ?")) {
-			state.setString(1, user);
-			state.execute();
+		try (Statement state = c.createStatement()) {
+			state.execute("SELECT * FROM TIME WHERE user = '" + user + "'");
 			ResultSet rs = state.getResultSet();
 			
-			if(rs == null)
-				message = Utils.toMessage(GameTime.getInstance().getManager().check_missing_message);
-			else
 				if(rs.next()){
 					long time = rs.getLong(2);
 					message = Utils.toMessage(GameTime.getInstance().getManager().check_message,user,time);

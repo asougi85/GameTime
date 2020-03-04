@@ -4,15 +4,26 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
+import org.bukkit.command.CommandSender;
+
+import com.google.common.collect.Lists;
+import com.shader.gt.Utils;
 import com.shader.gt.api.CallableExecutor;
 
 public class KeyExecutor implements CallableExecutor {
 
 	private String key;
+	private CommandSender sender;
+	ArrayList<String> list = Lists.newArrayList();
 
-	public KeyExecutor(String key) {
+	public KeyExecutor(CommandSender sender, String key) {
+		this.sender = sender;
 		this.key = key;
 
 	}
@@ -24,33 +35,22 @@ public class KeyExecutor implements CallableExecutor {
 			boolean contain = false;
 			state.execute("SELECT * FROM MAP WHERE account = '" + key + "'");
 			ResultSet map = state.getResultSet();
-			if (map != null) {
-				if (map.next()) {
-					contain = true;
-					Date d = map.getDate(2);
-					System.out.println("Key: " + key);
-					System.out.println("状态: 未使用");
-					System.out.println("价值: " + map.getLong(3) + "秒");
-					System.out.println("创建时间: " + d.toLocaleString());
-				}
+
+			if (map.next()) {
+				contain = true;
+				Date d = map.getDate(2);
+				Calendar cc = Calendar.getInstance();
+				list.add("Key: " + key);
+				list.add("状态: 未使用");
+				list.add("价值: " + Utils.getTime(map.getLong(3)));
+				DateFormat fmt = new SimpleDateFormat("yyyy年MM月dd日 hh:mm");
+				list.add("创建时间: " + fmt.format(d));
 			}
 
-			state.execute("SELECT * FROM LOG WHERE account = '" + key + "'");
-			map = state.getResultSet();
-			if (map != null) {
-				if (map.next()) {
-					contain = true;
-					Date d = map.getDate(3);
-					System.out.println("Key: " + key);
-					System.out.println("状态: 被" + map.getString(1) + "使用");
-					System.out.println("价值: " + map.getLong(4) + "秒");
-					System.out.println("使用时间: " +d.toLocaleString());
-				}
-			}
 			if (!contain) {
-				System.out.println("未找到该Key");
 				return new Runnable() {
 					public void run() {
+						sender.sendMessage("未找到该Key");
 					}
 				};
 			}
@@ -59,7 +59,13 @@ public class KeyExecutor implements CallableExecutor {
 			e.printStackTrace();
 			throw e;
 		}
-		return null;
+		return new Runnable() {
+			public void run() {
+				for (String s : list) {
+					sender.sendMessage(s);
+				}
+			}
+		};
 	}
 
 }

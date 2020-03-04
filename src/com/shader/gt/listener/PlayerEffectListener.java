@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.shader.gt.GameTime;
 import com.shader.gt.PlayerManager;
+import com.shader.gt.Utils;
 
 public class PlayerEffectListener implements Listener {
 
@@ -72,7 +73,7 @@ public class PlayerEffectListener implements Listener {
 		String name = evt.getPlayer().getName();
 		if (pm.isWaiting(name)) {
 			evt.setCancelled(true);
-			evt.getPlayer().sendMessage(GameTime.getInstance().getManager().waiting_message);
+			evt.getPlayer().sendMessage(Utils.toMessage(GameTime.getInstance().getManager().waiting_message));
 		} else if (pm.isBlack(name)) {
 			if (!evt.getMessage().startsWith("/register") && !evt.getMessage().startsWith("/login")
 					&& !evt.getMessage().startsWith("/gt"))
