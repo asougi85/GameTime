@@ -1,0 +1,25 @@
+name: GameTime
+version: 1.0.0
+authors: [UnknownDomain,woshi85]
+depend: [ProtocolLib]
+
+main: com.shader.gt.GameTime
+
+permissions: 
+  gametime.gt: 
+    default: op
+    
+  gametime.help:
+    default: true
+    
+  gametime.use: 
+    default: true
+    
+  gametime.check: 
+    default: true
+    
+  gametime.checkother: 
+    default: op
+    
+  gametime.checkkey: 
+    default: op

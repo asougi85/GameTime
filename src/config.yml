@@ -1,0 +1,20 @@
+#%time%替换符可使用%day%,%hour%,%minute%,%second%
+
+time_format: '%day%天%hour%小时%minute%分钟'
+
+waiting_message: '&e[GameTime]&b正在读取您的数据库信息,请等待'
+check_message: '&e[GameTime]&b%name%的游戏时间还剩下%time%'
+success_message: '&e[GameTime]&b充值成功！'
+fail_message: '&e[GameTime]&b您的CDKEY有误'
+
+inform: true
+#分钟为单位/use 
+inform_time: 30
+inform_message: '你的游戏时间还剩下%time%'
+inform_use_title: true
+
+use_mysql: false
+address: '127.0.0.1'
+port: 22003
+user: 'your account'
+password: 'your password'
